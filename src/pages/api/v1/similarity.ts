@@ -5,7 +5,7 @@ import { openai } from '@/lib/openai'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { z } from 'zod'
 
-const reqSchema = z.object({
+const reqSchema = z.object({    //validation of inputs
   text1: z.string().max(1000),
   text2: z.string().max(1000),
 })
@@ -35,7 +35,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const start = new Date()
     const embeddings = await Promise.all(
       [text1, text2].map(async (text) => {
-        const res = await openai.createEmbedding({
+        const res = await openai.createEmbedding({ //creates a vec from a text
           model: 'text-embedding-ada-002',
           input: text,
         })
@@ -44,7 +44,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       })
     )
 
-    const similarity = cosineSimilarity(embeddings[0], embeddings[1])
+    const similarity = cosineSimilarity(embeddings[0], embeddings[1]) //determine similarity btw 2 vec
 
     const duration = new Date().getTime() - start.getTime()
 

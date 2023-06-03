@@ -52,7 +52,7 @@ export const authOptions: NextAuthOptions = {
       })
 
       if (!dbUser) {
-        token.id = user!.id
+        token.id = user!.id   // ! tells ts that we know user exists
         return token
       }
 

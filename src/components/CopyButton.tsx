@@ -20,6 +20,7 @@ const CopyButton: FC<CopyButtonProps> = ({
       {...props}
       type='button'
       onClick={() => {
+        //How to copy to clipboard in JS
         navigator.clipboard.writeText(valueToCopy)
 
         toast({

@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server'
 import { Ratelimit } from '@upstash/ratelimit'
 import { Redis } from '@upstash/redis'
 
+// guards all api routes
 const redis = new Redis({
   url: process.env.REDIS_URL,
   token: process.env.REDIS_SECRET,
@@ -20,7 +21,7 @@ export default withAuth(
 
     // Manage rate limiting
     if (pathname.startsWith('/api')) {
-      const ip = req.ip ?? '127.0.0.1'
+      const ip = req.ip ?? '127.0.0.1'    //?? if undefined use local host ip
       try {
         const { success } = await ratelimit.limit(ip)
 
@@ -34,7 +35,7 @@ export default withAuth(
     // Manage route protection
     const token = await getToken({ req })
     const isAuth = !!token
-    const isAuthPage = req.nextUrl.pathname.startsWith('/login')
+    const isAuthPage = req.nextUrl.pathname.startsWith('/login') //prevent logged users from accessing login route
 
     const sensitiveRoutes = ['/dashboard']
 
@@ -43,12 +44,12 @@ export default withAuth(
         return NextResponse.redirect(new URL('/dashboard', req.url))
       }
 
-      return null
+      return null   //this pass on the request to next stage below
     }
 
     if (
       !isAuth &&
-      sensitiveRoutes.some((route) => pathname.startsWith(route))
+      sensitiveRoutes.some((route) => pathname.startsWith(route))   //matche sensitiveRoutes arr and returns true if route starts with any element of the sensitiveRoutes array
     ) {
       return NextResponse.redirect(new URL('/login', req.url))
     }
@@ -66,5 +67,5 @@ export default withAuth(
 )
 
 export const config = {
-  matcher: ['/', '/login', '/dashboard/:path*', '/api/:path*'],
+  matcher: ['/', '/login', '/dashboard/:path*', '/api/:path*'], //determins where middleware will run
 }

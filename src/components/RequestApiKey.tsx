@@ -76,6 +76,7 @@ const RequestApiKey: FC<RequestApiKeyProps> = ({}) => {
         </div>
         <div className='mt-6 flex justify-center sm:mt-0 sm:ml-4 sm:flex-shrink-0'>
           <Button disabled={!!apiKey} isLoading={isCreating}>
+            {/* !apiKey turns apiKey to boolean !!apiKey inverts the boolean !apiKey returns */}
             Request key
           </Button>
         </div>
