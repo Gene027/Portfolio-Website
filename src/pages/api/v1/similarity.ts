@@ -5,6 +5,7 @@ import { openai } from '@/lib/openai'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { z } from 'zod'
 
+//similarity algorithm
 const reqSchema = z.object({    //validation of inputs
   text1: z.string().max(1000),
   text2: z.string().max(1000),
